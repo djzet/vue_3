@@ -1,13 +1,15 @@
-Vue.eventBus = new Vue();
+let eventBus = new Vue();
 
 Vue.component('board', {
     template:`
-        <div>
+        <div class="tabs">
             <newBoard></newBoard>
-            <table_1 :column_1="column_1"></table_1>
-            <table_2 :column_2="column_2"></table_2>
-            <table_3 :column_3="column_3"></table_3>
-            <table_4 :column_4="column_4"></table_4>
+            <div class="tabs-wrap">
+                <table_1 :column_1="column_1"></table_1>
+                <table_2 :column_2="column_2"></table_2>
+                <table_3 :column_3="column_3"></table_3>
+                <table_4 :column_4="column_4"></table_4>
+            </div>   
         </div>
     `,
     data(){
@@ -19,19 +21,83 @@ Vue.component('board', {
         }
     },
     mounted(){
-        eventBus.$on('addColumn_1', table_1 => {
-            this.column_1.push(table_1);
+        eventBus.$on('addColumn_1', tab => {
+            this.column_1.push(tab);
         });
-        eventBus.$on('addColumn_2', table_2 => {
-            this.column_2.push(table_2);
+        eventBus.$on('addColumn_2', tab => {
+            this.column_2.push(tab);
         });
-        eventBus.$on('addColumn_3', table_3 => {
-            this.column_3.push(table_3);
+        eventBus.$on('addColumn_3', tab => {
+            this.column_3.push(tab);
         });
-        eventBus.$on('addColumn_4', table_4 => {
-            this.column_4.push(table_4);
+        eventBus.$on('addColumn_4', tab => {
+            this.column_4.push(tab);
         });
     }
+})
+
+Vue.component('table_1',{
+    props: {
+        column_1: {
+            type: Array,
+        },
+        tab: {
+            type: Object
+        },
+    },
+    template:`
+        <div class="tab">
+            
+        </div>
+    `,
+})
+
+Vue.component('table_2',{
+    props: {
+        column_2: {
+            type: Array,
+        },
+        tab: {
+            type: Object
+        },
+    },
+    template:`
+        <div class="tab">
+            
+        </div>
+    `,
+})
+
+Vue.component('table_3',{
+    props: {
+        column_3: {
+            type: Array,
+        },
+        tab: {
+            type: Object
+        },
+    },
+    template:`
+        <div class="tab">
+            
+        </div>
+    `,
+})
+
+Vue.component('table_4',{
+    props: {
+        column_4: {
+            type: Array,
+        },
+        tab: {
+            type: Object
+        },
+    },
+    template:`
+        <div class="tab">
+            
+        </div>
+    `,
 })
 
 Vue.component('newBoard', {
@@ -72,13 +138,13 @@ Vue.component('newBoard', {
     },
     methods:{
         onSubmit(){
-            let table_1 = {
+            let tab = {
                 title: this.title,
                 description: this.description,
                 date: new Date().toLocaleDateString().split('.').reverse().join('-'),
                 deadline: this.deadline
             }
-            eventBus.$emit('addColumn_1', table_1);
+            eventBus.$emit('addColumn_1', tab);
             this.title = null;
             this.description = null;
             this.date = null;
