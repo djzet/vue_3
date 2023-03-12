@@ -73,17 +73,17 @@ Vue.component('table_1',{
     `,
     methods: {
         nextTab(tab){
-            this.column_1.splice(this.column_1.indexOf(tab), 1)
-            eventBus.$emit('addColumn_2', tab)
+            this.column_1.splice(this.column_1.indexOf(tab), 1);
+            eventBus.$emit('addColumn_2', tab);
         },
         deleteTab(tab){
-            this.column_1.splice(this.column_1.indexOf(tab), 1)
+            this.column_1.splice(this.column_1.indexOf(tab), 1);
         },
         updateTab(tab){
-            tab.editButton = false
-            this.column_1.push(tab)
-            this.column_1.splice(this.column_1.indexOf(tab), 1)
-            tab.edit = new Date().toLocaleString()
+            tab.editButton = false;
+            this.column_1.push(tab);
+            this.column_1.splice(this.column_1.indexOf(tab), 1);
+            tab.edit = new Date().toLocaleString();
         }
     }
 })
@@ -100,8 +100,41 @@ Vue.component('table_2',{
     template:`
         <div class="tab">
             <h2>Задачи в работе</h2>
+            <ul class="tab-li">
+                <li v-for="tab in column_2">
+                    <a @click="tab.editButton = true">Редактировать</a><br>
+                    <p class="tab-title">{{tab.title}}</p>
+                    <ul class="tab-task">
+                        <li>Описание: {{tab.description}}</li>
+                        <li>Дата создания: {{tab.date}}</li>
+                        <li v-if="tab.edit != null">Последние изменение: {{tab.edit}}</li>
+                        <li v-if="tab.editButton === true">
+                            <form @submit.prevent="updateTab(tab)">
+                                <label for="title">Новый заголовок</label>
+                                <input id="title" type="text" v-model="tab.title" maxlength="30" placeholder="Заголовок">
+                                <label for="description">Новое описание:</label> 
+                                <textarea id="description" v-model="tab.description" cols="20" rows="5"></textarea>
+                                <input type="submit" value="Редактировать">
+                            </form>                      
+                        </li>
+                    </ul>
+                    <a @click="nextTab(tab)">Следующая колонка</a>
+                </li>
+            </ul>
         </div>
     `,
+    methods:{
+        nextTab(tab){
+            this.column_2.splice(this.column_2.indexOf(tab), 1);
+            eventBus.$emit('addColumn_3', tab);
+        },
+        updateTab(tab){
+            tab.editButton = false;
+            this.column_2.push(tab);
+            this.column_2.splice(this.column_2.indexOf(tab), 1);
+            tab.edit = new Date().toLocaleString();
+        }
+    }
 })
 
 Vue.component('table_3',{
@@ -116,8 +149,41 @@ Vue.component('table_3',{
     template:`
         <div class="tab">
             <h2>Тестирование</h2>
+            <ul class="tab-li">
+                <li v-for="tab in column_3">
+                    <a @click="tab.editButton = true">Редактировать</a><br>
+                    <p class="tab-title">{{tab.title}}</p>
+                    <ul class="tab-task">
+                        <li>Описание: {{tab.description}}</li>
+                        <li>Дата создания: {{tab.date}}</li>
+                        <li v-if="tab.edit != null">Последние изменение: {{tab.edit}}</li>
+                        <li v-if="tab.editButton === true">
+                            <form @submit.prevent="updateTab(tab)">
+                                <label for="title">Новый заголовок</label>
+                                <input id="title" type="text" v-model="tab.title" maxlength="30" placeholder="Заголовок">
+                                <label for="description">Новое описание:</label> 
+                                <textarea id="description" v-model="tab.description" cols="20" rows="5"></textarea>
+                                <input type="submit" value="Редактировать">
+                            </form>                      
+                        </li>
+                    </ul>
+                    <a @click="nextTab(tab)">Следующая колонка</a>
+                </li>
+            </ul>
         </div>
     `,
+    methods: {
+        nextTab(tab){
+            this.column_3.splice(this.column_3.indexOf(tab), 1);
+            eventBus.$emit('addColumn_4', tab);
+        },
+        updateTab(tab){
+            tab.editButton = false;
+            this.column_3.push(tab);
+            this.column_3.splice(this.column_3.indexOf(tab), 1);
+            tab.edit = new Date().toLocaleString();
+        }
+    }
 })
 
 Vue.component('table_4',{
