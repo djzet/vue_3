@@ -41,6 +41,9 @@ button {
     width: 100px;
     cursor: pointer;
 }
+#description{
+    resize: none;
+}
 /*Модальное окно*/
 .section-modal{
     margin: 0 auto;
@@ -117,3 +120,27 @@ button {
     border-radius: 10px;
     background-color: aliceblue;
 }
+.tab-li{
+    background-color: antiquewhite;
+    margin-left: 20px;
+    margin-right: 20px;
+    border-radius: 10px;
+    list-style-type: none;
+    margin-bottom: 20px;
+}
+.tab-li > a{
+
+}
+.tab-task > li{
+    margin-bottom: 5px;
+}
+.tab-task{
+    margin-bottom: 10px;
+    text-align: start;
+    padding: 0;
+    margin-right: 30px;
+    list-style-type: none;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+}
+

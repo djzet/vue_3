@@ -47,9 +47,45 @@ Vue.component('table_1',{
     },
     template:`
         <div class="tab">
-            
+            <h2>Запланированные задачи</h2>
+            <ul class="tab-li">
+                <li v-for="tab in column_1">
+                    <a @click="deleteTab(tab)">Удалить</a> &emsp; <a @click="tab.editButton = true">Редактировать</a><br>
+                    <p class="tab-title">{{tab.title}}</p>
+                    <ul class="tab-task">
+                        <li>Описание: {{tab.description}}</li>
+                        <li>Дата создания: {{tab.date}}</li>
+                        <li v-if="tab.edit != null">Последние изменение: {{tab.edit}}</li>
+                        <li v-if="tab.editButton === true">
+                            <form @submit.prevent="updateTab(tab)">
+                                <label for="title">Новый заголовок</label>
+                                <input id="title" type="text" v-model="tab.title" maxlength="30" placeholder="Заголовок">
+                                <label for="description">Новое описание:</label> 
+                                <textarea id="description" v-model="tab.description" cols="20" rows="5"></textarea>
+                                <input type="submit" value="Редактировать">
+                            </form>                      
+                        </li>
+                    </ul>
+                    <a @click="nextTab(tab)">Следующая колонка</a>
+                </li>
+            </ul>
         </div>
     `,
+    methods: {
+        nextTab(tab){
+            this.column_1.splice(this.column_1.indexOf(tab), 1)
+            eventBus.$emit('addColumn_2', tab)
+        },
+        deleteTab(tab){
+            this.column_1.splice(this.column_1.indexOf(tab), 1)
+        },
+        updateTab(tab){
+            tab.editButton = false
+            this.column_1.push(tab)
+            this.column_1.splice(this.column_1.indexOf(tab), 1)
+            tab.edit = new Date().toLocaleString()
+        }
+    }
 })
 
 Vue.component('table_2',{
@@ -63,7 +99,7 @@ Vue.component('table_2',{
     },
     template:`
         <div class="tab">
-            
+            <h2>Задачи в работе</h2>
         </div>
     `,
 })
@@ -79,7 +115,7 @@ Vue.component('table_3',{
     },
     template:`
         <div class="tab">
-            
+            <h2>Тестирование</h2>
         </div>
     `,
 })
@@ -95,7 +131,7 @@ Vue.component('table_4',{
     },
     template:`
         <div class="tab">
-            
+            <h2>Выполненные задачи</h2>
         </div>
     `,
 })
@@ -113,11 +149,11 @@ Vue.component('newBoard', {
                         <div class="modal-body">
                             <div class="create_form">
                                 <form class="create" @submit.prevent="onSubmit">
-                                    <label for="title">Title</label>
-                                    <input id="title" v-model="title" type="text" placeholder="title" required maxlength="30">   
-                                    <label for="description">Description</label>
+                                    <label for="title">Заголовок</label>
+                                    <input id="title" v-model="title" type="text" placeholder="Заголовок" required maxlength="30">   
+                                    <label for="description">Описание</label>
                                     <textarea id="description" v-model="description" rows="5" columns="10" required maxlength="60"></textarea>
-                                    <label for="deadline">Deadline</label>
+                                    <label for="deadline">Дедлайн</label>
                                     <input id="deadline" type="date" v-model="deadline" placeholder="дд.мм.гггг" required>                       
                                     <button type="submit">Создать</button>
                                 </form>
@@ -142,7 +178,9 @@ Vue.component('newBoard', {
                 title: this.title,
                 description: this.description,
                 date: new Date().toLocaleDateString().split('.').reverse().join('-'),
-                deadline: this.deadline
+                deadline: this.deadline,
+                edit: null,
+                editButton: false,
             }
             eventBus.$emit('addColumn_1', tab);
             this.title = null;
@@ -157,6 +195,6 @@ Vue.component('newBoard', {
 let app = new Vue({
     el: '#app',
     data:{
-        name: 'Kanban board'
+        name: 'Kanban доска'
     }
 })
