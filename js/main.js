@@ -107,6 +107,7 @@ Vue.component('table_2',{
                     <ul class="tab-task">
                         <li>Описание: {{tab.description}}</li>
                         <li>Дата создания: {{tab.date}}</li>
+                        <li v-if="tab.reason != null">Проблема: {{tab.reason}}</li>
                         <li v-if="tab.edit != null">Последние изменение: {{tab.edit}}</li>
                         <li v-if="tab.editButton === true">
                             <form @submit.prevent="updateTab(tab)">
@@ -166,8 +167,15 @@ Vue.component('table_3',{
                                 <input type="submit" value="Редактировать">
                             </form>                      
                         </li>
+                        <li v-if="tab.refund">
+                            <form @submit.prevent="refundTab(tab)">
+                                <label for="description">Причина: &emsp;</label> 
+                                <textarea id="description" v-model="tab.reason" cols="20" rows="5"></textarea>
+                                <input type="submit" value="Отправить">
+                            </form>
+                        </li>
                     </ul>
-                    <a @click="nextTab(tab)">Следующая колонка</a>
+                    <a @click="tab.refund = true">Вернуть</a> &emsp; <a @click="nextTab(tab)">Следующая колонка</a>
                 </li>
             </ul>
         </div>
@@ -176,6 +184,11 @@ Vue.component('table_3',{
         nextTab(tab){
             this.column_3.splice(this.column_3.indexOf(tab), 1);
             eventBus.$emit('addColumn_4', tab);
+        },
+        refundTab(tab){
+            tab.refund = false
+            this.column_3.splice(this.column_3.indexOf(tab), 1);
+            eventBus.$emit('addColumn_2', tab);
         },
         updateTab(tab){
             tab.editButton = false;
@@ -247,6 +260,10 @@ Vue.component('newBoard', {
                 deadline: this.deadline,
                 edit: null,
                 editButton: false,
+                reason: null,
+                refund: false,
+
+
             }
             eventBus.$emit('addColumn_1', tab);
             this.title = null;
