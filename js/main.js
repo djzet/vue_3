@@ -21,18 +21,57 @@ Vue.component('board', {
         }
     },
     mounted(){
+        this.column_1 = JSON.parse(localStorage.getItem("column_1")) || [];
+        this.column_2 = JSON.parse(localStorage.getItem("column_2")) || [];
+        this.column_3 = JSON.parse(localStorage.getItem("column_3")) || [];
+        this.column_4 = JSON.parse(localStorage.getItem("column_4")) || [];
         eventBus.$on('addColumn_1', tab => {
             this.column_1.push(tab);
+            this.saveTab_1();
         });
         eventBus.$on('addColumn_2', tab => {
             this.column_2.push(tab);
+            this.saveTab_2();
         });
         eventBus.$on('addColumn_3', tab => {
             this.column_3.push(tab);
+            this.saveTab_3();
         });
         eventBus.$on('addColumn_4', tab => {
             this.column_4.push(tab);
+            if (tab.date > tab.deadline){
+                tab.term = false;
+            }
+            this.saveTab_4();
         });
+    },
+    watch: {
+        column_1(newValue) {
+            localStorage.setItem("column_1", JSON.stringify(newValue));
+        },
+        column_2(newValue) {
+            localStorage.setItem("column_2", JSON.stringify(newValue));
+        },
+        column_3(newValue) {
+            localStorage.setItem("column_3", JSON.stringify(newValue));
+        },
+        column_4(newValue) {
+            localStorage.setItem("column_4", JSON.stringify(newValue));
+        }
+    },
+    methods:{
+        saveTab_1(){
+            localStorage.setItem('column_1', JSON.stringify(this.column_1));
+        },
+        saveTab_2(){
+            localStorage.setItem('column_2', JSON.stringify(this.column_2));
+        },
+        saveTab_3(){
+            localStorage.setItem('column_3', JSON.stringify(this.column_3));
+        },
+        saveTab_4(){
+            localStorage.setItem('column_4', JSON.stringify(this.column_4));
+        },
     }
 })
 
@@ -50,11 +89,13 @@ Vue.component('table_1',{
             <h2>Запланированные задачи</h2>
             <ul class="tab-li">
                 <li v-for="tab in column_1">
+                    <div class="separator"></div>
                     <a @click="deleteTab(tab)">Удалить</a> &emsp; <a @click="tab.editButton = true">Редактировать</a><br>
                     <p class="tab-title">{{tab.title}}</p>
                     <ul class="tab-task">
                         <li>Описание: {{tab.description}}</li>
                         <li>Дата создания: {{tab.date}}</li>
+                        <li>Дедлайн: {{tab.deadline}}</li>
                         <li v-if="tab.edit != null">Последние изменение: {{tab.edit}}</li>
                         <li v-if="tab.editButton === true">
                             <form @submit.prevent="updateTab(tab)">
@@ -107,6 +148,7 @@ Vue.component('table_2',{
                     <ul class="tab-task">
                         <li>Описание: {{tab.description}}</li>
                         <li>Дата создания: {{tab.date}}</li>
+                        <li>Дедлайн: {{tab.deadline}}</li>
                         <li v-if="tab.reason != null">Проблема: {{tab.reason}}</li>
                         <li v-if="tab.edit != null">Последние изменение: {{tab.edit}}</li>
                         <li v-if="tab.editButton === true">
@@ -157,6 +199,7 @@ Vue.component('table_3',{
                     <ul class="tab-task">
                         <li>Описание: {{tab.description}}</li>
                         <li>Дата создания: {{tab.date}}</li>
+                        <li>Дедлайн: {{tab.deadline}}</li>
                         <li v-if="tab.edit != null">Последние изменение: {{tab.edit}}</li>
                         <li v-if="tab.editButton === true">
                             <form @submit.prevent="updateTab(tab)">
@@ -211,6 +254,19 @@ Vue.component('table_4',{
     template:`
         <div class="tab">
             <h2>Выполненные задачи</h2>
+            <ul class="tab-li">
+                <li v-for="tab in column_4">
+                    <p class="tab-title">{{tab.title}}</p>
+                    <ul class="tab-task">
+                        <li>Описание: {{tab.description}}</li>
+                        <li>Дата создания: {{tab.date}}</li>
+                        <li>Дедлайн: {{tab.deadline}}</li>
+                        <li v-if="tab.edit != null">Последние изменение: {{tab.edit}}</li>
+                        <li v-if="tab.term">Завершено в срок</li>
+                        <li v-else>В срок не завершено</li>
+                    </ul>
+                </li>
+            </ul>
         </div>
     `,
 })
@@ -262,8 +318,7 @@ Vue.component('newBoard', {
                 editButton: false,
                 reason: null,
                 refund: false,
-
-
+                term: true,
             }
             eventBus.$emit('addColumn_1', tab);
             this.title = null;

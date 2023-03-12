@@ -128,8 +128,8 @@ button {
     list-style-type: none;
     margin-bottom: 20px;
 }
-.tab-li > a{
-
+a{
+    cursor: pointer;
 }
 .tab-task > li{
     margin-bottom: 5px;
@@ -142,5 +142,11 @@ button {
     list-style-type: none;
     word-wrap: break-word;
     white-space: pre-wrap;
+}
+.separator{
+    height: 20px;
+    width: 310px;
+    margin-left: -40px;
+    background-color: aliceblue;
 }
 
