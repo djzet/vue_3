@@ -44,6 +44,9 @@ button {
 #description{
     resize: none;
 }
+#reason{
+    resize: none;
+}
 /*Модальное окно*/
 .section-modal{
     margin: 0 auto;
@@ -55,14 +58,6 @@ button {
     bottom: 0;
     left: 0;
     background: rgba(0,0,0,0.5);
-    z-index: 1;
-    opacity: 0;
-    transition: opacity 200ms;
-    pointer-events: none;
-}
-.modal:target {
-    opacity: 1;
-    pointer-events: auto;
 }
 .modal-dialog {
     width: 400px;
@@ -77,11 +72,12 @@ button {
 .close {
     display: flex;
     flex-direction: row-reverse;
-    margin: 10px 10px 0 0;
+    margin: 0 10px 0 285px;
     font-size: 24px;
     font-weight: 700;
     color: black;
     opacity: .5;
+    background-color: white;
     text-decoration: none;
 }
 .modal-body{
